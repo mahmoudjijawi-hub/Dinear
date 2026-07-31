@@ -1,0 +1,30 @@
+<div class="product-card" data-product-id="{{ product.id }}">
+    <div class="product-image-wrap">
+        <img class="product-image"
+             src="{{ product.image_url }}"
+             alt="{{ product.name }}"
+             loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'">
+        <span class="product-category-tag">{{ category.name }}</span>
+    </div>
+    <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">${{ product.price }}</p>
+
+        <button class="add-to-cart-btn" data-action="add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6h15l-1.5 9h-12z"/>
+                <circle cx="9" cy="20" r="1.5"/>
+                <circle cx="18" cy="20" r="1.5"/>
+                <path d="M6 6L5 3H2"/>
+            </svg>
+            أضف للسلة
+        </button>
+
+        <div class="quantity-control" data-action="quantity">
+            <button class="quantity-btn" data-action="decrease" aria-label="تقليل">−</button>
+            <span class="quantity-value">1</span>
+            <button class="quantity-btn" data-action="increase" aria-label="زيادة">+</button>
+        </div>
+    </div>
+</div>

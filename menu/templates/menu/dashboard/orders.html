@@ -1,0 +1,74 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+
+{% block title %}الطلبات الواردة - Dinear{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block header_extra %}
+<div class="dashboard-actions">
+    <span style="color: var(--text-muted); font-size: 0.9rem;">مرحباً، {{ user.username }}</span>
+    <a href="{% url 'dashboard_logout' %}" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">تسجيل خروج</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>الطلبات الواردة</h1>
+        </div>
+
+        <!-- فلاتر الحالة -->
+        <nav class="order-filters">
+            <a href="?status=all" class="filter-tab{% if status_filter == 'all' %} active{% endif %}">كل الطلبات</a>
+            {% for value, label in status_choices %}
+            <a href="?status={{ value }}" class="filter-tab{% if status_filter == value %} active{% endif %}">{{ label }}</a>
+            {% endfor %}
+        </nav>
+
+        {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+            <div class="order-card" data-order-id="{{ order.id }}">
+                <div class="order-card-header">
+                    <span class="order-number">طلب #{{ order.id }}</span>
+                    <span class="badge badge-{{ order.status }}">{{ order.get_status_display }}</span>
+                    <span class="order-time">{{ order.created_at|date:"Y/m/d - H:i" }}</span>
+                </div>
+
+                <div class="order-items-list">
+                    {% for item in order.items.all %}
+                    <div class="order-item-row">
+                        <span>{{ item.product_name }} × {{ item.quantity }}</span>
+                        <span>${{ item.subtotal }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="order-card-footer">
+                    <span class="order-total">المجموع: ${{ order.total }}</span>
+                    <select class="status-select" data-order-id="{{ order.id }}">
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}"{% if order.status == value %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-orders">لا توجد طلبات{% if status_filter != 'all' %} بهذه الحالة{% endif %} حالياً</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

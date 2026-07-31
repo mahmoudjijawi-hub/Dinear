@@ -1,0 +1,73 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+
+{% block title %}Dinear - المنيو{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}">
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+{% endblock %}
+
+{% block header_extra %}
+<a href="{% url 'dashboard_login' %}" class="header-link">لوحة التحكم</a>
+{% endblock %}
+
+{% block content %}
+<div class="menu-page">
+    <div class="container">
+        <div class="menu-hero">
+            <h1>مرحباً بك في مطعم Dinear</h1>
+            <p>اختر من قائمتنا المتنوعة واطلب مباشرة</p>
+        </div>
+
+        <!-- تبويبات الأقسام -->
+        <nav class="category-tabs" id="categoryTabs">
+            {% for category in categories %}
+            <button class="category-tab{% if forloop.first %} active{% endif %}"
+                    data-target="section-{{ category.slug }}">
+                {{ category.name }}
+            </button>
+            {% endfor %}
+        </nav>
+
+        <div class="menu-layout">
+            <!-- محتوى المنيو -->
+            <div class="menu-content">
+                {% for category in categories %}
+                <section class="menu-section" id="section-{{ category.slug }}">
+                    <h2 class="section-title">{{ category.name }}</h2>
+                    <div class="products-grid">
+                        {% for product in category.products.all %}
+                            {% if product.is_available %}
+                            {% include 'menu/partials/product_card.html' with product=product category=category %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endfor %}
+            </div>
+
+            <!-- سلة جانبية (ديسكتوب) -->
+            {% include 'menu/partials/cart_sidebar.html' %}
+        </div>
+    </div>
+</div>
+
+<!-- شريط السلة (موبايل) -->
+{% include 'menu/partials/cart_mobile.html' %}
+
+<!-- نافذة تأكيد الطلب -->
+{% include 'menu/partials/order_modal.html' %}
+
+<!-- رسالة خطأ -->
+<div class="toast-error" id="toastError"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const PLACE_ORDER_URL = "{% url 'place_order' %}";
+    const CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
