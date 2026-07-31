@@ -14,10 +14,24 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 _allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-# السماح بنطاق Cursor Cloud أثناء التطوير
+# السماح بنطاقات Cursor Cloud أثناء التطوير
 if DEBUG:
-    _allowed_hosts.extend(['.cursorvm.com'])
+    _allowed_hosts.extend(['.cursorvm.com', '.agent.cvm.dev'])
 ALLOWED_HOSTS = _allowed_hosts
+
+# أصول موثوقة لـ CSRF (للإنتاج أو عبر متغير بيئة)
+_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'https://.cursorvm.com',
+        'https://.agent.cvm.dev',
+    ]
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'restaurant.middleware.CloudDevCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

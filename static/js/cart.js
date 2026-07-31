@@ -5,6 +5,20 @@
 // حالة السلة: { productId: { id, name, price, quantity } }
 let cart = {};
 
+/** قراءة CSRF token من الكوكي */
+function getCsrfToken() {
+    const name = 'csrftoken';
+    if (document.cookie) {
+        for (const cookie of document.cookie.split(';')) {
+            const trimmed = cookie.trim();
+            if (trimmed.startsWith(name + '=')) {
+                return decodeURIComponent(trimmed.substring(name.length + 1));
+            }
+        }
+    }
+    return typeof CSRF_TOKEN !== 'undefined' ? CSRF_TOKEN : '';
+}
+
 // عناصر DOM
 const cartItemsEl = document.getElementById('cartItems');
 const cartCountEl = document.getElementById('cartCount');
@@ -222,8 +236,9 @@ async function placeOrder() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': CSRF_TOKEN,
+                'X-CSRFToken': getCsrfToken(),
             },
+            credentials: 'same-origin',
             body: JSON.stringify({ items }),
         });
 

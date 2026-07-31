@@ -1,10 +1,10 @@
+{% load static %}
 <div class="product-card" data-product-id="{{ product.id }}">
     <div class="product-image-wrap">
         <img class="product-image"
-             src="{{ product.image_url }}"
+             src="{% static product.image %}"
              alt="{{ product.name }}"
-             loading="lazy"
-             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'">
+             loading="lazy">
         <span class="product-category-tag">{{ category.name }}</span>
     </div>
     <div class="product-info">

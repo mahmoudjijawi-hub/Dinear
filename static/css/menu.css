@@ -107,6 +107,7 @@
     position: relative;
     height: 200px;
     overflow: hidden;
+    background: #f0ebe5;
 }
 
 .product-image {

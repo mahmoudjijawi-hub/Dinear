@@ -26,7 +26,7 @@ class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='الاسم')
     description = models.TextField(blank=True, verbose_name='الوصف')
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='السعر')
-    image_url = models.URLField(max_length=500, verbose_name='رابط الصورة')
+    image = models.CharField(max_length=500, verbose_name='مسار الصورة')
     is_available = models.BooleanField(default=True, verbose_name='متوفر')
     order = models.PositiveIntegerField(default=0, verbose_name='الترتيب')
 
