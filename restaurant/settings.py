@@ -33,6 +33,15 @@ if DEBUG:
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 
+# إعدادات الكوكيز لبيئة البروكسي السحابي
+if DEBUG:
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_HTTPONLY = False
+    # دعم البروكسي العكسي (HTTPS خارجي → HTTP داخلي)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

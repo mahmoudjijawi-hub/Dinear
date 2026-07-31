@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal, InvalidOperation
 
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -11,6 +12,7 @@ from .decorators import staff_required
 from .models import Category, Order, OrderItem, Product
 
 
+@ensure_csrf_cookie
 def menu_view(request):
     """عرض صفحة المنيو الرئيسية"""
     categories = Category.objects.prefetch_related('products').all()
@@ -79,6 +81,7 @@ def place_order(request):
         return JsonResponse({'success': False, 'error': 'بيانات الطلب غير صالحة'}, status=400)
 
 
+@ensure_csrf_cookie
 def dashboard_login(request):
     """صفحة تسجيل دخول صاحب المطعم"""
     if request.user.is_authenticated and request.user.is_staff:

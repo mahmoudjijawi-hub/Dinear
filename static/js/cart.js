@@ -238,11 +238,17 @@ async function placeOrder() {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCsrfToken(),
             },
-            credentials: 'same-origin',
+            credentials: 'include',
             body: JSON.stringify({ items }),
         });
 
-        const data = await response.json();
+        let data;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            throw new Error('فشل إرسال الطلب — حاول تحديث الصفحة');
+        }
 
         if (!response.ok || !data.success) {
             throw new Error(data.error || 'حدث خطأ أثناء إرسال الطلب');
