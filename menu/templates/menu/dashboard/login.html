@@ -1,5 +1,5 @@
 {% extends 'menu/base.html' %}
-{% load static %}
+{% load static dashboard_tags %}
 
 {% block title %}تسجيل الدخول - Dinear{% endblock %}
 
@@ -17,7 +17,7 @@
         <div class="alert alert-error">{{ error }}</div>
         {% endif %}
 
-        <form method="post"{% if ingress_token %} action="?_ingress_token={{ ingress_token }}"{% endif %}>
+        <form method="post" action="{% dashboard_url auth_token ingress_token %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">اسم المستخدم</label>

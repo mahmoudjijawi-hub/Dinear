@@ -1,5 +1,5 @@
 {% extends 'menu/base.html' %}
-{% load static %}
+{% load static dashboard_tags %}
 
 {% block title %}الطلبات الواردة - Dinear{% endblock %}
 
@@ -10,7 +10,7 @@
 {% block header_extra %}
 <div class="dashboard-actions">
     <span style="color: var(--text-muted); font-size: 0.9rem;">مرحباً، {{ user.username }}</span>
-    <a href="{% url 'dashboard_logout' %}{% if ingress_token %}?_ingress_token={{ ingress_token }}{% endif %}" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">تسجيل خروج</a>
+    <a href="{% url 'dashboard_logout' %}" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">تسجيل خروج</a>
 </div>
 {% endblock %}
 
@@ -21,11 +21,10 @@
             <h1>الطلبات الواردة</h1>
         </div>
 
-        <!-- فلاتر الحالة -->
         <nav class="order-filters">
-            <a href="?status=all{% if ingress_token %}&_ingress_token={{ ingress_token }}{% endif %}" class="filter-tab{% if status_filter == 'all' %} active{% endif %}">كل الطلبات</a>
+            <a href="{% dashboard_url auth_token ingress_token status='all' %}" class="filter-tab{% if status_filter == 'all' %} active{% endif %}">كل الطلبات</a>
             {% for value, label in status_choices %}
-            <a href="?status={{ value }}{% if ingress_token %}&_ingress_token={{ ingress_token }}{% endif %}" class="filter-tab{% if status_filter == value %} active{% endif %}">{{ label }}</a>
+            <a href="{% dashboard_url auth_token ingress_token status=value %}" class="filter-tab{% if status_filter == value %} active{% endif %}">{{ label }}</a>
             {% endfor %}
         </nav>
 
@@ -69,6 +68,8 @@
 {% block extra_js %}
 <script>
     const CSRF_TOKEN = "{{ csrf_token }}";
+    const AUTH_TOKEN = "{{ auth_token }}";
+    const INGRESS_TOKEN = "{{ ingress_token }}";
 </script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

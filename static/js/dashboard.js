@@ -2,7 +2,6 @@
  * dashboard.js — تحديث حالة الطلبات
  */
 
-/** قراءة CSRF token من الكوكي */
 function getCsrfToken() {
     const name = 'csrftoken';
     if (document.cookie) {
@@ -16,6 +15,18 @@ function getCsrfToken() {
     return typeof CSRF_TOKEN !== 'undefined' ? CSRF_TOKEN : '';
 }
 
+function buildApiUrl(path) {
+    const params = new URLSearchParams();
+    if (typeof AUTH_TOKEN !== 'undefined' && AUTH_TOKEN) {
+        params.set('auth_token', AUTH_TOKEN);
+    }
+    if (typeof INGRESS_TOKEN !== 'undefined' && INGRESS_TOKEN) {
+        params.set('_ingress_token', INGRESS_TOKEN);
+    }
+    const qs = params.toString();
+    return qs ? `${path}?${qs}` : path;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.status-select').forEach(select => {
         select.addEventListener('change', async () => {
@@ -25,13 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const badge = card.querySelector('.badge');
 
             try {
-                const response = await fetch(`/dashboard/orders/${orderId}/status/`, {
+                const response = await fetch(buildApiUrl(`/dashboard/orders/${orderId}/status/`), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': getCsrfToken(),
                     },
-                    credentials: 'same-origin',
+                    credentials: 'include',
                     body: JSON.stringify({ status: newStatus }),
                 });
 
@@ -41,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(data.error || 'فشل تحديث الحالة');
                 }
 
-                // تحديث الشارة
                 badge.className = `badge badge-${data.status}`;
                 badge.textContent = data.status_display;
             } catch (error) {

@@ -3,11 +3,11 @@ from decimal import Decimal, InvalidOperation
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
+from .auth_utils import authenticate_token, create_auth_token, get_auth_token
 from .decorators import staff_required
 from .models import Category, Order, OrderItem, Product
 from .utils import redirect_with_token
@@ -85,8 +85,13 @@ def place_order(request):
 @ensure_csrf_cookie
 def dashboard_login(request):
     """صفحة تسجيل دخول صاحب المطعم"""
+    # إذا التوكن صالح — توجيه مباشر للطلبات
+    user = authenticate_token(request)
+    if user:
+        return redirect_with_token(request, 'dashboard_orders', auth_token=get_auth_token(request))
+
     if request.user.is_authenticated and request.user.is_staff:
-        return redirect_with_token(request, 'dashboard_orders')
+        return redirect_with_token(request, 'dashboard_orders', auth_token=create_auth_token(request.user))
 
     error = None
     if request.method == 'POST':
@@ -95,18 +100,17 @@ def dashboard_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None and user.is_staff:
             login(request, user)
-            request.session.modified = True
-            return redirect_with_token(request, 'dashboard_orders')
+            auth_token = create_auth_token(user)
+            return redirect_with_token(request, 'dashboard_orders', auth_token=auth_token)
         error = 'اسم المستخدم أو كلمة المرور غير صحيحة'
 
     return render(request, 'menu/dashboard/login.html', {'error': error})
 
 
-@login_required(login_url='/dashboard/login/')
 def dashboard_logout(request):
     """تسجيل خروج صاحب المطعم"""
     logout(request)
-    return redirect_with_token(request, 'dashboard_login')
+    return redirect('dashboard_login')
 
 
 @staff_required
