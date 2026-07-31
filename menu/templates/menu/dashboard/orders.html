@@ -10,7 +10,7 @@
 {% block header_extra %}
 <div class="dashboard-actions">
     <span style="color: var(--text-muted); font-size: 0.9rem;">مرحباً، {{ user.username }}</span>
-    <a href="{% url 'dashboard_logout' %}" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">تسجيل خروج</a>
+    <a href="{% url 'dashboard_logout' %}{% if ingress_token %}?_ingress_token={{ ingress_token }}{% endif %}" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">تسجيل خروج</a>
 </div>
 {% endblock %}
 
@@ -23,9 +23,9 @@
 
         <!-- فلاتر الحالة -->
         <nav class="order-filters">
-            <a href="?status=all" class="filter-tab{% if status_filter == 'all' %} active{% endif %}">كل الطلبات</a>
+            <a href="?status=all{% if ingress_token %}&_ingress_token={{ ingress_token }}{% endif %}" class="filter-tab{% if status_filter == 'all' %} active{% endif %}">كل الطلبات</a>
             {% for value, label in status_choices %}
-            <a href="?status={{ value }}" class="filter-tab{% if status_filter == value %} active{% endif %}">{{ label }}</a>
+            <a href="?status={{ value }}{% if ingress_token %}&_ingress_token={{ ingress_token }}{% endif %}" class="filter-tab{% if status_filter == value %} active{% endif %}">{{ label }}</a>
             {% endfor %}
         </nav>
 

@@ -35,10 +35,13 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # إعدادات الكوكيز لبيئة البروكسي السحابي
 if DEBUG:
+    # جلسة موقّعة داخل الكوكي نفسه — أكثر موثوقية مع البروكسي
+    SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_HTTPONLY = False
-    # دعم البروكسي العكسي (HTTPS خارجي → HTTP داخلي)
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     USE_X_FORWARDED_HOST = True
 
@@ -60,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'restaurant.middleware.IngressTokenMiddleware',
 ]
 
 ROOT_URLCONF = 'restaurant.urls'
@@ -74,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'menu.context_processors.ingress_token',
             ],
         },
     },

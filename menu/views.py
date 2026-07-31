@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 from .decorators import staff_required
 from .models import Category, Order, OrderItem, Product
+from .utils import redirect_with_token
 
 
 @ensure_csrf_cookie
@@ -85,7 +86,7 @@ def place_order(request):
 def dashboard_login(request):
     """صفحة تسجيل دخول صاحب المطعم"""
     if request.user.is_authenticated and request.user.is_staff:
-        return redirect('dashboard_orders')
+        return redirect_with_token(request, 'dashboard_orders')
 
     error = None
     if request.method == 'POST':
@@ -94,7 +95,8 @@ def dashboard_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None and user.is_staff:
             login(request, user)
-            return redirect('dashboard_orders')
+            request.session.modified = True
+            return redirect_with_token(request, 'dashboard_orders')
         error = 'اسم المستخدم أو كلمة المرور غير صحيحة'
 
     return render(request, 'menu/dashboard/login.html', {'error': error})
@@ -104,7 +106,7 @@ def dashboard_login(request):
 def dashboard_logout(request):
     """تسجيل خروج صاحب المطعم"""
     logout(request)
-    return redirect('dashboard_login')
+    return redirect_with_token(request, 'dashboard_login')
 
 
 @staff_required

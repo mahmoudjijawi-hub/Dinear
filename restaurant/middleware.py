@@ -1,5 +1,8 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.middleware.csrf import CsrfViewMiddleware
+
+from menu.utils import append_ingress_token, get_ingress_token
 
 
 class CloudDevCsrfMiddleware(CsrfViewMiddleware):
@@ -26,7 +29,6 @@ class CloudDevCsrfMiddleware(CsrfViewMiddleware):
         )
 
     def process_request(self, request):
-        # تجاوز فحص CSRF بالكامل في بيئة التطوير السحابية
         if self._is_trusted_request(request):
             request.csrf_processing_done = True
             return None
@@ -36,3 +38,22 @@ class CloudDevCsrfMiddleware(CsrfViewMiddleware):
         if self._is_trusted_request(request):
             return True
         return super()._origin_verified(request)
+
+
+class IngressTokenMiddleware:
+    """يحافظ على _ingress_token في كل إعادات التوجيه"""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        token = get_ingress_token(request)
+        if token:
+            request.session['ingress_token'] = token
+        else:
+            token = request.session.get('ingress_token', '')
+
+        response = self.get_response(request)
+        if isinstance(response, HttpResponseRedirect) and token:
+            response['Location'] = append_ingress_token(response['Location'], token)
+        return response

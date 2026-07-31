@@ -17,7 +17,7 @@
         <div class="alert alert-error">{{ error }}</div>
         {% endif %}
 
-        <form method="post">
+        <form method="post"{% if ingress_token %} action="?_ingress_token={{ ingress_token }}"{% endif %}>
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">اسم المستخدم</label>

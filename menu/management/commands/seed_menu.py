@@ -89,6 +89,11 @@ class Command(BaseCommand):
             User.objects.create_superuser('admin', 'admin@dinear.com', 'admin123')
             self.stdout.write(self.style.SUCCESS('تم إنشاء مستخدم المدير: admin / admin123'))
         else:
-            self.stdout.write('مستخدم المدير موجود مسبقاً')
+            admin = User.objects.get(username='admin')
+            admin.set_password('admin123')
+            admin.is_staff = True
+            admin.is_superuser = True
+            admin.save()
+            self.stdout.write('تم تحديث كلمة مرور المدير: admin / admin123')
 
         self.stdout.write(self.style.SUCCESS('تمت تعبئة البيانات بنجاح!'))
