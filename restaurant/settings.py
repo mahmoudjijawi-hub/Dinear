@@ -13,7 +13,11 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+_allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# السماح بنطاق Cursor Cloud أثناء التطوير
+if DEBUG:
+    _allowed_hosts.extend(['.cursorvm.com'])
+ALLOWED_HOSTS = _allowed_hosts
 
 INSTALLED_APPS = [
     'django.contrib.admin',
