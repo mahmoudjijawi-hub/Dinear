@@ -7,18 +7,17 @@ from menu.utils import append_ingress_token, get_ingress_token
 
 
 class CloudDevCsrfMiddleware(CsrfViewMiddleware):
-    """يتعامل مع CSRF في بيئة Cursor Cloud أثناء التطوير"""
+    """يتعامل مع CSRF في بيئات التطوير السحابية وRender"""
 
     TRUSTED_SUFFIXES = (
         '.cursorvm.com',
         '.agent.cvm.dev',
+        '.onrender.com',
         'localhost',
         '127.0.0.1',
     )
 
     def _is_trusted_request(self, request):
-        if not settings.DEBUG:
-            return False
         values = [
             request.get_host(),
             request.META.get('HTTP_ORIGIN', ''),

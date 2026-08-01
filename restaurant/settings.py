@@ -40,17 +40,20 @@ if DEBUG:
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 
-# إعدادات الكوكيز لبيئة البروكسي السحابي
+# إعدادات البروكسي والكوكيز
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
 if DEBUG:
-    # جلسة موقّعة داخل الكوكي نفسه — أكثر موثوقية مع البروكسي
+    # تطوير محلي / Cursor Cloud
     SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_HTTPONLY = False
-    SESSION_COOKIE_SAMESITE = 'Lax'
-    CSRF_COOKIE_SAMESITE = 'Lax'
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    USE_X_FORWARDED_HOST = True
+else:
+    # إنتاج Render (HTTPS)
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -44,7 +44,7 @@ python manage.py runserver
    ```
 3. **Start Command:**
    ```bash
-   gunicorn restaurant.wsgi:application
+   ./start.sh
    ```
 4. أضف متغيرات البيئة:
    - `DJANGO_DEBUG=False`
