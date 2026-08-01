@@ -35,6 +35,25 @@ python manage.py runserver
 
 افتح المتصفح على: http://127.0.0.1:8000/
 
+## النشر على Render
+
+1. أنشئ **Web Service** جديد واربطه بالمستودع
+2. **Build Command:**
+   ```bash
+   ./build.sh
+   ```
+3. **Start Command:**
+   ```bash
+   gunicorn restaurant.wsgi:application
+   ```
+4. أضف متغيرات البيئة:
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_SECRET_KEY` — مفتاح سري عشوائي
+   - `DJANGO_ALLOWED_HOSTS` — نطاق Render (مثل: `your-app.onrender.com`)
+   - `CSRF_TRUSTED_ORIGINS` — `https://your-app.onrender.com`
+
+> يتم جمع الملفات الثابتة تلقائياً عبر `collectstatic` في `build.sh`، وتُخدم عبر **WhiteNoise**.
+
 ## بيانات الدخول
 
 | الحساب | اسم المستخدم | كلمة المرور |
@@ -78,5 +97,6 @@ restaurant/
 
 - **Backend:** Django 6 (Templates + JsonResponse)
 - **Database:** SQLite3
+- **Static Files:** WhiteNoise
 - **Frontend:** HTML + CSS + Vanilla JavaScript
 - **Auth:** django.contrib.auth

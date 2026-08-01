@@ -14,10 +14,11 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 _allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-# السماح بنطاقات Cursor Cloud أثناء التطوير
+# السماح بنطاقات Cursor Cloud أثناء التطوير وRender في الإنتاج
 if DEBUG:
     _allowed_hosts.extend(['.cursorvm.com', '.agent.cvm.dev'])
-ALLOWED_HOSTS = _allowed_hosts
+_allowed_hosts.append('.onrender.com')
+ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts if h.strip()]
 
 # أصول موثوقة لـ CSRF (للإنتاج أو عبر متغير بيئة)
 _csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'restaurant.middleware.CloudDevCsrfMiddleware',
@@ -108,6 +110,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
