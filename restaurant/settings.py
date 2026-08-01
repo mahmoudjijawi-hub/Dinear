@@ -14,6 +14,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 _allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+_allowed_hosts.append('dinear-j7hu.onrender.com')
 # السماح بنطاقات Cursor Cloud أثناء التطوير وRender في الإنتاج
 if DEBUG:
     _allowed_hosts.extend(['.cursorvm.com', '.agent.cvm.dev'])
