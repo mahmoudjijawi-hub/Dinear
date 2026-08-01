@@ -1,0 +1,241 @@
+/* ===== صفحة المنيو ===== */
+.menu-page {
+    padding: 32px 0 120px;
+}
+
+.menu-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.menu-hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+/* ===== تبويبات الأقسام ===== */
+.category-tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 8px 0 24px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+
+.category-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.category-tab {
+    flex-shrink: 0;
+    padding: 10px 22px;
+    border-radius: 50px;
+    background: var(--white);
+    border: 2px solid var(--border-light);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.category-tab:hover,
+.category-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+}
+
+/* ===== تخطيط الصفحة ===== */
+.menu-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    align-items: start;
+}
+
+.menu-content {
+    min-width: 0;
+}
+
+/* ===== أقسام المنيو ===== */
+.menu-section {
+    margin-bottom: 48px;
+    scroll-margin-top: 100px;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--accent);
+    display: inline-block;
+}
+
+/* ===== شبكة المنتجات ===== */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* ===== بطاقة المنتج ===== */
+.product-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.product-image-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f0ebe5;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.product-category-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.product-info {
+    padding: 16px 16px 20px;
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.product-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+}
+
+/* ===== زر الإضافة وعداد الكمية ===== */
+.add-to-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--white);
+    border: 2px solid var(--border-light);
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: all 0.2s;
+}
+
+.add-to-cart-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.add-to-cart-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.quantity-control {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--accent);
+    border-radius: 50px;
+    padding: 8px 16px;
+    width: 100%;
+}
+
+.quantity-control.active {
+    display: flex;
+}
+
+.quantity-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.quantity-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.quantity-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    min-width: 24px;
+    text-align: center;
+}
+
+/* ===== تجاوب المنيو ===== */
+@media (max-width: 1024px) {
+    .menu-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .menu-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-page {
+        padding-bottom: 100px;
+    }
+}

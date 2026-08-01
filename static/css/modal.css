@@ -1,0 +1,112 @@
+/* ===== نافذة تأكيد الطلب ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 40px 32px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #E8F8F0;
+    color: #27AE60;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.modal-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.modal-order-summary {
+    text-align: right;
+    background: var(--bg-cream);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.modal-order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9rem;
+}
+
+.modal-order-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 2px solid var(--border-light);
+    color: var(--accent);
+}
+
+.modal-new-order-btn {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* ===== رسالة خطأ عامة ===== */
+.toast-error {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #C0392B;
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    z-index: 2000;
+    transition: transform 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.toast-error.show {
+    transform: translateX(-50%) translateY(0);
+}
