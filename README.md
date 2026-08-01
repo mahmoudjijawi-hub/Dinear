@@ -14,21 +14,8 @@
 ## المتطلبات
 
 - Python 3.10+
-- PostgreSQL 14+
 
 ## التثبيت والتشغيل
-
-### 1. إعداد PostgreSQL
-
-```bash
-# إنشاء مستخدم وقاعدة بيانات
-sudo -u postgres psql
-CREATE USER restaurant WITH PASSWORD 'restaurant123';
-CREATE DATABASE restaurant_db OWNER restaurant;
-\q
-```
-
-### 2. إعداد المشروع
 
 ```bash
 # إنشاء بيئة افتراضية وتثبيت المتطلبات
@@ -36,16 +23,13 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# تطبيق migrations
+# تطبيق migrations (ينشئ db.sqlite3 تلقائياً)
 python manage.py migrate
 
 # تعبئة البيانات الأولية (المنيو + مستخدم المدير)
 python manage.py seed_menu
-```
 
-### 3. تشغيل السيرفر
-
-```bash
+# تشغيل السيرفر
 python manage.py runserver
 ```
 
@@ -71,11 +55,6 @@ python manage.py runserver
 
 | المتغير | القيمة الافتراضية |
 |---------|-------------------|
-| `DB_NAME` | `restaurant_db` |
-| `DB_USER` | `restaurant` |
-| `DB_PASSWORD` | `restaurant123` |
-| `DB_HOST` | `localhost` |
-| `DB_PORT` | `5432` |
 | `DJANGO_SECRET_KEY` | مفتاح تطوير |
 | `DJANGO_DEBUG` | `True` |
 
@@ -98,6 +77,6 @@ restaurant/
 ## التقنيات المستخدمة
 
 - **Backend:** Django 6 (Templates + JsonResponse)
-- **Database:** PostgreSQL
+- **Database:** SQLite3
 - **Frontend:** HTML + CSS + Vanilla JavaScript
 - **Auth:** django.contrib.auth
